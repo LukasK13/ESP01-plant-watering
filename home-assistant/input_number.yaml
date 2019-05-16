@@ -1,0 +1,9 @@
+watering_target_volume:
+  name: Plant watering target volume
+  initial: 100
+  min: 0
+  max: 10000
+  step: 10
+  mode: box
+  unit_of_measurement: ml
+  icon: mdi:water-pump

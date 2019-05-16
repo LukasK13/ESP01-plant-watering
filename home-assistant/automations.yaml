@@ -1,0 +1,12 @@
+- id: plant_watering_trigger
+  alias: 'Turn on plant watering'
+  trigger:
+    platform: mqtt
+    topic: "home-assistant/watering/set_dummy"
+  action:
+    service: mqtt.publish
+    data_template:
+      topic: "home-assistant/watering/set"
+      payload_template: '{"state":"{{trigger.payload}}","volume": {{ states("in$
+      retain: false
+      qos: 0

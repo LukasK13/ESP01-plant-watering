@@ -1,0 +1,8 @@
+- platform: mqtt
+  command_topic: "home-assistant/watering/set_dummy"
+  name: plant_watering
+  icon: mdi:water-pump
+  state_topic: "home-assistant/watering"
+  value_template: '{{value_json.state}}'
+  availability_topic: "home-assistant/watering/availability"
+  json_attributes_topic: "home-assistant/watering"

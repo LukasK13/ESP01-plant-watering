@@ -1,0 +1,3 @@
+automation: !include automations.yaml
+input_number: !include input_number.yaml
+switch: !include switches.yaml
