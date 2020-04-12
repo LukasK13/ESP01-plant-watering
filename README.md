@@ -19,7 +19,7 @@ You can find the electric plan in the following image.
 
 ## Flashing the ESP01
 Instructions on how to flash the ESP01 as well as how to install and use platformio are available on the internet, therefore this will be neglected here.
-In order to get the code to work, you need to modify the file [```src/config.h```](https://github.com/LukasK13/ESP01-plant-watering/blob/master/src/config.h). In this file you need to go through all definitions and adapt them to your needs.
+In order to get the code to work, you need to rename and modify the file [```src/config_template.h```](https://github.com/LukasK13/ESP01-plant-watering/blob/master/src/config_template.h) to `src/config.h`. In this file you need to go through all definitions and adapt them to your needs.
 Afterwards, you can compile and flash the software to the ESP01.
 
 ## Home Assistant Integration
