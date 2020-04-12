@@ -33,3 +33,4 @@
 .DS_Store
 src/config.h
 .pio/*
+.vscode
