@@ -67,8 +67,8 @@ bool processJson(char* message) {
 
 	if (error) { // parsing message failed
 		Serial.println("parseObject() failed"); // Print debug info
-    Serial.print(F("deserializeJson() failed: ")); // Print debug info
-    Serial.println(error.c_str()); // Print debug info
+    	Serial.print(F("deserializeJson() failed: ")); // Print debug info
+    	Serial.println(error.c_str()); // Print debug info
 		return false; // return with failure status
 	}
 
@@ -190,9 +190,9 @@ void ICACHE_RAM_ATTR pulseCounter() { // link interrupt handler to RAM
 void setup() {
 	// Set up pin modes
 	pinMode(CONFIG_PIN_PUMP, OUTPUT); // Set pump pin mode to output
-  if (!CONFIG_DEBUG) { // Debug mode is disabled
-	  pinMode(CONFIG_PIN_FLOW_METER, INPUT); // Set flow meter pin mode to input
-  }
+	if (!CONFIG_DEBUG) { // Debug mode is disabled
+		pinMode(CONFIG_PIN_FLOW_METER, INPUT_PULLDOWN_16); // Set flow meter pin mode to input
+	}
 
 	// Set up the serial interface
 	if (CONFIG_DEBUG) { // Only set up serial interface if debug mode is enabled
@@ -223,19 +223,27 @@ void loop() {
 			volumeCurrent = 0.0; // Reset currently flown volume
 			attachInterrupt(digitalPinToInterrupt(CONFIG_PIN_FLOW_METER), pulseCounter, FALLING); // Attach interrupt for flow meter
 			digitalWrite(CONFIG_PIN_PUMP, HIGH); // Activate pump
-      millis_time = millis(); // Save current system time for status update delay
+      		millis_time = millis(); // Save current system time for status update delay
 			Serial.println("Watering plants."); // Print debug message
 		} else if (volumeCurrent >= volumeTotal) { // Volume limit reached
-      digitalWrite(CONFIG_PIN_PUMP, LOW); // Deactivate pump
+      		digitalWrite(CONFIG_PIN_PUMP, LOW); // Deactivate pump
 			detachInterrupt(digitalPinToInterrupt(CONFIG_PIN_FLOW_METER)); // Detach interrupt for flow meter
 			volumeCurrent = -1.0; // Set current volume to -1.0 to indicate pump deactivation
 			state = false; // set pump state variable to off
-      sendState(); // Update MQTT system status
+      		sendState(); // Update MQTT system status
 			Serial.println("Finished watering plants."); // Print debug message
 		} else if (millis() - millis_time >= CONFIG_MQTT_UPDATE_FREQ){ // Plant Watering is ongoing and status update is due
-      millis_time = millis(); // Save current system time for status update delay
-      //volumeCurrent = volumeCurrent + 1.0; // Dummy increment current volume for testing purposes without flow meter
-      sendState(); // Update MQTT system status
+      		millis_time = millis(); // Save current system time for status update delay
+      		//volumeCurrent = volumeCurrent + 1.0; // Dummy increment current volume for testing purposes without flow meter
+      		sendState(); // Update MQTT system status
+		}
+	} else { // Plant watering is deactivated
+		if (digitalRead(CONFIG_PIN_PUMP) == HIGH) { // pump is still active
+			digitalWrite(CONFIG_PIN_PUMP, LOW); // Deactivate pump
+			detachInterrupt(digitalPinToInterrupt(CONFIG_PIN_FLOW_METER)); // Detach interrupt for flow meter
+			volumeCurrent = -1.0; // Set current volume to -1.0 to indicate pump deactivation
+			state = false; // set pump state variable to off
+      		sendState(); // Update MQTT system status
 		}
 	}
 }

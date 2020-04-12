@@ -6,7 +6,7 @@
  */
 
 // Pins
-#define CONFIG_PIN_PUMP 0 // Output pin for water punp
+#define CONFIG_PIN_PUMP 0 // Output pin for water pump
 #define CONFIG_PIN_FLOW_METER 1 // Input pin for water flow meter
 
 // WiFi
