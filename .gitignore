@@ -32,3 +32,4 @@
 *.app
 .DS_Store
 src/config.h
+.pio/*
